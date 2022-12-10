@@ -1,0 +1,22 @@
+.ipynb_checkpoints
+output
+desktop.ini
+test.py
+test.ipynb
+Links.txt
+Отчет НИР.docx
+term_frequency_annotation.txt
+term_frequency_name.txt
+DocTerm.txt
+name_tf_idf_short.txt
+Классификация без удаления малозначимых терминов.txt
+Классификация с удалением малозначимых терминов ТЕСТ.txt
+Классификация с удалением малозначимых терминов.txt
+data.xlsx test_data.xlsx
+tf-idf with reduced size (be name).xlsx
+tf-idf with reduced size (by annotation).xlsx
+train_data.xlsx
+annotation_tf_idf_short.txt
+Links.txt
+ROC curve for ANNOTATION.png
+ROC curve for ANNOTATION.png
