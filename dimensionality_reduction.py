@@ -49,6 +49,22 @@ def df_to_list(df_tf_idf_short):
     return tf_idf_short, terms
 
 
+def read_dimData_fromFiles(tf_idf_file, terms_file):
+    """Считывание tf-idf матриц и терминов из текстовых файлов"""
+    # Считывание tf_idf_short из файла
+    tf_idf_short = []
+    file = open(tf_idf_file, 'r', encoding='utf-8')
+    for line in file:
+        tf_idf_short.append(eval(line))
+    file.close()
+    
+    # Считывание terms_by_name_short из файла
+    file = open(terms_file, 'r', encoding='utf-8')
+    terms_short = eval(file.read())
+    file.close()
+
+    return tf_idf_short, terms_short
+
 """# Запись annotation_tf_idf_short в файл, для более быстрого получения переменной
 file = open("annotation_tf_idf_short.txt", 'w', encoding='utf-8')
 for i in range(len(annotation_tf_idf_short)):
@@ -62,4 +78,10 @@ annotation_tf_idf_short_FromFile = []
 file = open("annotation_tf_idf_short.txt", 'r', encoding='utf-8')
 for line in file:
     annotation_tf_idf_short_FromFile.append(eval(line))
+file.close()"""
+
+
+"""# Считывание terms_by_annatation_short из файла
+file = open("terms_by_annatation_short.txt", 'r', encoding='utf-8')
+terms_by_annatation_short = eval(file.read())
 file.close()"""
