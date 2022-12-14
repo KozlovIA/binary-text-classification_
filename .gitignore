@@ -10,8 +10,6 @@ term_frequency_name.txt
 DocTerm.txt
 name_tf_idf_short.txt
 Классификация без удаления малозначимых терминов.txt
-Классификация с удалением малозначимых терминов ТЕСТ.txt
-Классификация с удалением малозначимых терминов.txt
 data.xlsx test_data.xlsx
 tf-idf with reduced size (be name).xlsx
 tf-idf with reduced size (by annotation).xlsx
@@ -20,3 +18,21 @@ annotation_tf_idf_short.txt
 Links.txt
 ROC curve for ANNOTATION.png
 ROC curve for NAME.png
+Классификация КБС с удалением малозначимых терминов.txt
+Классификация random forest с удалением малозначимых терминов NAME.txt
+Классификация random forest с удалением малозначимых терминов.txt
+Классификация random tree с удалением малозначимых терминов.txt
+Классификация без удаления малозначимых терминов.txt
+Классификация КБС с удалением малозначимых терминов.txt
+Классификация с логистической регрессией удалением малозначимых терминов.txt
+Метки random forest NAME.txt
+Метки random forest.txt
+Метки random tree.txt
+Метки КБС.txt
+Метки логистической регрессии.txt
+Тестовая выборка ANNOTATION.txt
+Тестовая выборка NAME.txt
+Тестовая выборка исходные метки ANNOTATION.txt
+Тестовая выборка исходные метки NAME.txt
+Отчет НИР Козлов И.А. Бинарная текстовая классификация.docx
+Классификация КБС с удалением малозначимых терминов.txt

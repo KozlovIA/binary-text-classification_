@@ -1,10 +1,37 @@
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import cross_val_score, GridSearchCV
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_auc_score
 from sklearn.metrics import roc_curve
 from sklearn.decomposition import PCA
+import time
+
+
+def pca(data, target, title=''):
+    plt.figure()
+    data_r_2 = PCA(n_components=2, random_state=0)
+    data_reduced_2 = data_r_2.fit_transform(data)
+    plt.scatter(data_reduced_2[:, 0], data_reduced_2[:, 1], c=target,
+                cmap=plt.cm.Set1,
+                edgecolor="k",
+                s=40)
+    plt.title(title) 
+    fig = plt.figure()
+    ax = fig.add_subplot(projection='3d')
+    data_r_3 = PCA(n_components=3, random_state=0)
+    data_reduced_3 = data_r_3.fit_transform(data)
+    ax.scatter(data_reduced_3[:, 0], data_reduced_3[:, 1], data_reduced_3[:, 2], c=target,
+                cmap=plt.cm.Set1,
+                edgecolor="k",
+                s=40)
+    plt.title(title) 
+    # print("Выделенные компоненты", data_r_2.components_, "Главные компоненты(2)", data_r_2.explained_variance_ratio_, sep='\n')
+    # print("Главные компоненты(3)", data_r_3.explained_variance_ratio_, sep='\n')
+
 
 
 def logistic_regression(X_train, X_test, Y_train, Y_test, label=""):
@@ -42,23 +69,8 @@ def logistic_regression(X_train, X_test, Y_train, Y_test, label=""):
     plt.title('Receiver operating characteristic ' + label)
     plt.legend(loc="lower right")
 
-    model_2 = PCA(n_components=2, random_state=0)
-    x_reduced_2 = model_2.fit_transform(X_test)
-    predict_visual = plt.figure()
-    # ax = fig.add_subplot(projection='3d')
-    plt.scatter(x_reduced_2[:, 0], x_reduced_2[:, 1], c=test_pred)
-    plt.xlabel('X predict')
-    plt.ylabel('Y predict')
-    plt.title('Logistic Regression ' + label)
+    pca(X_test, test_pred, title='Logistic Regression ' + label)
 
-    model_2 = PCA(n_components=3, random_state=0)
-    x_reduced_2 = model_2.fit_transform(X_test)
-    predict_visual3 = plt.figure()
-    ax = predict_visual3.add_subplot(projection='3d')
-    ax.scatter(x_reduced_2[:, 0], x_reduced_2[:, 1], x_reduced_2[:, 2], c=test_pred)
-    plt.xlabel('X predict')
-    plt.ylabel('Y predict')
-    plt.title('Logistic Regression ' + label)    
 
     return test_pred, test_score, confusionMatrix, classificationReport
 
@@ -67,7 +79,8 @@ def logistic_regression(X_train, X_test, Y_train, Y_test, label=""):
 
 
 def k_nearest_neighbors(X_train, X_test, Y_train, Y_test, label):  # k ближайших соседей
-    """Алгоритм k-ближайших соседей
+    """
+    Алгоритм k-ближайших соседей
     X_train - обучающая выборка
     X_test - тестовая выборка
     Y_train - метки обучающей выборки
@@ -90,28 +103,60 @@ def k_nearest_neighbors(X_train, X_test, Y_train, Y_test, label):  # k ближ�
     plt.title('Receiver operating characteristic ' + label)
     plt.legend(loc="lower right")
 
-    model_2 = PCA(n_components=2, random_state=0)
-    x_reduced_2 = model_2.fit_transform(X_test)
+    pca(X_test, Y, title='KNeighbors PCA' + label)
 
-    predict_visual = plt.figure()
-    # ax = fig.add_subplot(projection='3d')
-    plt.scatter(x_reduced_2[:, 0], x_reduced_2[:, 1], c=Y)
-    plt.xlabel('X predict')
-    plt.ylabel('Y predict')
-    plt.title('KNeighbors PCA' + label)
+    return Y, classification_report(Y_test, Y), confusion_matrix(Y_test, Y), accuracy_score(Y_test, Y)
 
-    model_2 = PCA(n_components=3, random_state=0)
-    x_reduced_2 = model_2.fit_transform(X_test)
+def random_tree(X_train, X_test, y_train, y_test, label='', param={'criterion': ["gini", "entropy"],
+                          'max_depth': list(range(100,201,10)),
+                          'max_features': list(range(0,101,10))}):
+    """Классификация с помощью дерева решений"""
 
-    predict_visual3 = plt.figure()
-    ax = predict_visual3.add_subplot(projection='3d')
-    ax.scatter(x_reduced_2[:, 0], x_reduced_2[:, 1], x_reduced_2[:, 2], c=Y)
-    plt.xlabel('X predict')
-    plt.ylabel('Y predict')
-    plt.title('KNeighbors PCA' + label)
+    start_time = time.time()
 
-    return classification_report(Y_test, Y), confusion_matrix(Y_test, Y), accuracy_score(Y_test, Y)
+    model = GridSearchCV(DecisionTreeClassifier(),
+                         param,
+                         n_jobs=3, cv=5)
+    model.fit(X_train, y_train)
 
+    y_proba = model.predict(X_test)
+
+    pca(X_test, y_proba, title='Decision Tree Classifier ' + label)
+
+    print('Обучение модели')
+    print('Best_params random_tree ' + label)
+    print(model.best_params_)
+
+    print("Decision Tree for " + label, (time.time() - start_time)//60, "min", (time.time() - start_time)%60, "sec")
+    
+    return y_proba, classification_report(y_test, y_proba), confusion_matrix(y_test, y_proba), accuracy_score(y_test, y_proba)
+
+
+def random_forest(X_train, X_test, y_train, y_test, label='', param={'criterion': ["gini", "entropy"],
+                          'n_estimators':list(range(10,101,10)),
+                          'max_depth': list(range(10,151,10)),
+                          'max_features': list(range(10,151,10))}):
+    """Классификация с помощью случайного леса"""
+    model = GridSearchCV(RandomForestClassifier(),
+                         param,
+                         n_jobs=3, cv=5)
+
+    start_time = time.time()
+
+    model.fit(X_train, y_train)
+    y_proba = model.predict(X_test)
+    
+    pca(X_test, y_proba, title='Random Forest Classifier ' + label)
+
+    print('Обучение модели')
+    print('Best_params Random Forest Classifier ' + label)
+    print(model.best_params_)
+    print('Report')
+    print(classification_report(y_test, model.predict(X_test)))
+
+    print("Random Forest for " + label, (time.time() - start_time)//60, "min", (time.time() - start_time)%60, "sec")
+
+    return y_proba, classification_report(y_test, y_proba), confusion_matrix(y_test, y_proba), accuracy_score(y_test, y_proba)
 
 
 
