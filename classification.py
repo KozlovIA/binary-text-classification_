@@ -16,7 +16,7 @@ def pca(data, target, title=''):
     data_r_2 = PCA(n_components=2, random_state=0)
     data_reduced_2 = data_r_2.fit_transform(data)
     plt.scatter(data_reduced_2[:, 0], data_reduced_2[:, 1], c=target,
-                cmap=plt.cm.Set1,
+                cmap=mcolors.ListedColormap(["red", "gray"]),
                 edgecolor="k",
                 s=40)
     plt.title(title) 
@@ -25,7 +25,7 @@ def pca(data, target, title=''):
     data_r_3 = PCA(n_components=3, random_state=0)
     data_reduced_3 = data_r_3.fit_transform(data)
     ax.scatter(data_reduced_3[:, 0], data_reduced_3[:, 1], data_reduced_3[:, 2], c=target,
-                cmap=plt.cm.Set1,
+                cmap=mcolors.ListedColormap(["red", "gray"]),
                 edgecolor="k",
                 s=40)
     plt.title(title) 

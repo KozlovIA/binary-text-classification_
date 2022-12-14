@@ -36,3 +36,11 @@ ROC curve for NAME.png
 Тестовая выборка исходные метки NAME.txt
 Отчет НИР Козлов И.А. Бинарная текстовая классификация.docx
 Классификация КБС с удалением малозначимых терминов.txt
+Классификация random forest с удалением малозначимых терминов ANNOTATION.txt
+Классификация random forest с удалением малозначимых терминов NAME_param.txt
+Классификация КБС БЕЗ удаления малозначимых терминов.txt
+Метки random forest ANNOTATION_1.txt
+Метки random forest ANNOTATION.txt
+Метки random forest NAME_param_1.txt
+Метки random forest NAME_param.txt
+Метки КБС без удаления терминов.txt
